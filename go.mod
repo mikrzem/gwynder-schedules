@@ -1,4 +1,4 @@
-module gwynder-schedules
+module github.com/mikrzem/gwynder-schedules
 
 require (
 	cloud.google.com/go v0.36.0 // indirect

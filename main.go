@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"gwynder-schedules/database"
+	"github.com/mikrzem/gwynder-schedules/database"
 	"net/http"
 )
 
