@@ -17,6 +17,9 @@ func InitializeDatabase() {
 		log.Fatal(err)
 	} else {
 		log.Println("Connected to database")
+		ApplyMigration(db)
+		log.Println("Applied database migration")
 		Database = db
 	}
+
 }
