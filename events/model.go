@@ -6,9 +6,9 @@ import (
 )
 
 type ScheduledEvent struct {
-	StartTime time.Time
-	EndTime   time.Time
-	Title     string
+	StartTime time.Time `gorm:"not null"`
+	EndTime   time.Time `gorm:"not null"`
+	Title     string    `gorm:"not null"`
 }
 
 type ScheduledEventEntity struct {

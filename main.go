@@ -4,12 +4,14 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/mikrzem/gwynder-schedules/database"
+	"github.com/mikrzem/gwynder-schedules/database/migration"
 	"github.com/mikrzem/gwynder-schedules/events"
+	"log"
 	"net/http"
 )
 
 func main() {
-	database.InitializeDatabase()
+	initialize()
 
 	e := echo.New()
 
@@ -27,4 +29,11 @@ func main() {
 	events.Router(groupFactory)
 
 	e.Logger.Fatal(e.Start(":1323"))
+}
+
+func initialize() {
+	database.InitializeDatabase()
+	log.Println("Connected to database")
+	migration.ApplyMigration(database.Database)
+	log.Println("Applied database migration")
 }

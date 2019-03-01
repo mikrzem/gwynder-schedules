@@ -1,4 +1,4 @@
-package database
+package migration
 
 import (
 	"github.com/jinzhu/gorm"
@@ -7,6 +7,7 @@ import (
 
 func ApplyMigration(db *gorm.DB) {
 
+	db.SingularTable(true)
 	db.AutoMigrate(&events.ScheduledEventEntity{})
 
 }

@@ -8,5 +8,5 @@ type BaseData struct {
 
 type OwnedModel struct {
 	gorm.Model
-	Owner string
+	Owner string `gorm:"not null"`
 }
