@@ -21,7 +21,7 @@ type ScheduledEventData struct {
 	ScheduledEvent
 }
 
-func (event ScheduledEvent) FillData(source ScheduledEvent) {
+func (event *ScheduledEvent) FillData(source ScheduledEvent) {
 	event.StartTime = source.StartTime
 	event.EndTime = source.EndTime
 	event.Title = source.Title

@@ -11,7 +11,7 @@ import (
 
 func Router(factory common.GroupFactory) {
 	group := factory("/events")
-	group.GET("/", func(context echo.Context) error {
+	group.GET("", func(context echo.Context) error {
 		return context.JSON(
 			http.StatusOK,
 			convertToData(
@@ -30,17 +30,17 @@ func Router(factory common.GroupFactory) {
 			Get(
 				common.Owner(context),
 				uint(id),
-			),
+			).ToData(),
 		)
 	})
-	group.POST("/", func(context echo.Context) error {
+	group.POST("", func(context echo.Context) error {
 		event := findBody(context)
 		return context.JSON(
 			http.StatusOK,
 			Create(
 				common.Owner(context),
 				event,
-			),
+			).ToData(),
 		)
 	})
 	group.PUT("/:id", func(context echo.Context) error {
@@ -52,7 +52,7 @@ func Router(factory common.GroupFactory) {
 				common.Owner(context),
 				id,
 				event,
-			),
+			).ToData(),
 		)
 	})
 	group.DELETE("/:id", func(context echo.Context) error {

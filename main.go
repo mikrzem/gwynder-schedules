@@ -6,6 +6,7 @@ import (
 	"github.com/mikrzem/gwynder-schedules/database"
 	"github.com/mikrzem/gwynder-schedules/database/migration"
 	"github.com/mikrzem/gwynder-schedules/events"
+	"github.com/mikrzem/gwynder-schedules/hosting"
 	"log"
 	"net/http"
 )
@@ -13,22 +14,25 @@ import (
 func main() {
 	initialize()
 
-	e := echo.New()
+	app := echo.New()
 
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	app.Use(middleware.Logger())
+	app.Use(middleware.Recover())
+	app.Use(middleware.CORS())
 
-	e.GET("/", func(c echo.Context) error {
+	app.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
 	groupFactory := func(path string) *echo.Group {
-		return e.Group("/api/schedules" + path)
+		return app.Group("/api/schedules" + path)
 	}
+
+	hosting.Router(app)
 
 	events.Router(groupFactory)
 
-	e.Logger.Fatal(e.Start(":1323"))
+	app.Logger.Fatal(app.Start(":1323"))
 }
 
 func initialize() {
