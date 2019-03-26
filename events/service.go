@@ -10,7 +10,7 @@ import (
 func Select(owner string, fromTime time.Time, toTime time.Time) []ScheduledEventEntity {
 	var events []ScheduledEventEntity
 	database.Database.
-		Where("owner = ? AND start_time <= ? AND start_time >= ?", owner, fromTime, toTime).
+		Where("owner = ? AND start_time >= ? AND start_time <= ?", owner, fromTime, toTime).
 		Order("start_time").
 		Find(&events)
 	return events
