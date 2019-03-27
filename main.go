@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/mikrzem/gwynder-schedules/central"
 	"github.com/mikrzem/gwynder-schedules/database"
 	"github.com/mikrzem/gwynder-schedules/database/migration"
 	"github.com/mikrzem/gwynder-schedules/events"
@@ -40,4 +41,5 @@ func initialize() {
 	log.Println("Connected to database")
 	migration.ApplyMigration(database.Database)
 	log.Println("Applied database migration")
+	central.Register()
 }
