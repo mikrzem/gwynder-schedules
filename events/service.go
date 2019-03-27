@@ -38,7 +38,7 @@ func Create(owner string, event ScheduledEventData) ScheduledEventEntity {
 func Update(owner string, id uint, event ScheduledEventData) ScheduledEventEntity {
 	result := Get(owner, id)
 	result.FillData(event.ScheduledEvent)
-	database.Database.Update(&result)
+	database.Database.Save(&result)
 	return result
 }
 
