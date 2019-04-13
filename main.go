@@ -4,6 +4,8 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/mikrzem/gwynder-schedules/central"
+	"github.com/mikrzem/gwynder-schedules/central/dashboard"
+	"github.com/mikrzem/gwynder-schedules/central/health"
 	"github.com/mikrzem/gwynder-schedules/database"
 	"github.com/mikrzem/gwynder-schedules/database/migration"
 	"github.com/mikrzem/gwynder-schedules/events"
@@ -32,6 +34,8 @@ func main() {
 	hosting.Router(app)
 
 	events.Router(groupFactory)
+	health.Router(groupFactory)
+	dashboard.Router(groupFactory)
 
 	app.Logger.Fatal(app.Start(":1323"))
 }

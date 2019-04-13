@@ -15,15 +15,47 @@ var registerActive = os.Getenv("schedules_register") == "true"
 var registerUrl = os.Getenv("schedules_register_url")
 var selfUrl = os.Getenv("schedules_self_url")
 var tokenLocation = os.Getenv("schedules_token_file")
-var apiConfiguration = map[string]string{
-	"name": "schedules",
-	"path": selfUrl + "/api/schedules",
+
+type ApplicationConfiguration struct {
+	Active      bool   `json:"active"`
+	Path        string `json:"path"`
+	DisplayName string `json:"displayName"`
+	StartPath   string `json:"startPath"`
 }
-var applicationConfiguration = map[string]string{
-	"name":        "schedules",
-	"path":        selfUrl + "/application/schedules",
-	"displayName": "Schedules",
-	"startPath":   "page/",
+
+type DashboardConfiguration struct {
+	Active bool    `json:"active"`
+	Path   *string `json:"path"`
+}
+
+type HealthConfiguration struct {
+	Active bool    `json:"active"`
+	Path   *string `json:"path"`
+}
+
+type ApiConfiguration struct {
+	Name        string                   `json:"name"`
+	Path        string                   `json:"path"`
+	Application ApplicationConfiguration `json:"application"`
+	Dashboard   DashboardConfiguration   `json:"dashboard"`
+	Health      HealthConfiguration      `json:"health"`
+}
+
+var configuration = ApiConfiguration{
+	Name: "schedules",
+	Path: selfUrl + "/api/schedules",
+	Application: ApplicationConfiguration{
+		Active:      true,
+		Path:        selfUrl + "/application/schedules",
+		DisplayName: "Schedules",
+		StartPath:   "page/",
+	},
+	Dashboard: DashboardConfiguration{
+		Active: true,
+	},
+	Health: HealthConfiguration{
+		Active: true,
+	},
 }
 
 func Register() {
@@ -54,23 +86,10 @@ func registerWithRetry() {
 }
 
 func tryRegister() bool {
-	apiRegistered := tryRegisterApi()
-	applicationRegistered := tryRegisterApplication()
-	return apiRegistered && applicationRegistered
-}
-
-func tryRegisterApi() bool {
-	content, _ := json.Marshal(apiConfiguration)
+	content, _ := json.Marshal(configuration)
 	request, _ := http.NewRequest("PUT", registerUrl+"/proxy/api/schedules", bytes.NewBuffer(content))
 	response, err := executeRequest(request)
-	return checkResponse(response, err, "api")
-}
-
-func tryRegisterApplication() bool {
-	content, _ := json.Marshal(applicationConfiguration)
-	request, _ := http.NewRequest("PUT", registerUrl+"/proxy/application/schedules", bytes.NewBuffer(content))
-	response, err := executeRequest(request)
-	return checkResponse(response, err, "application")
+	return checkResponse(response, err)
 }
 
 func executeRequest(request *http.Request) (*http.Response, error) {
@@ -90,17 +109,17 @@ func readToken() string {
 	return string(content)
 }
 
-func checkResponse(response *http.Response, err error, requestType string) bool {
-	log.Printf("Attempting to register %s", requestType)
+func checkResponse(response *http.Response, err error) bool {
+	log.Printf("Attempting to register api")
 	if err != nil {
-		log.Printf("Failed to register %s", requestType)
+		log.Printf("Failed to register api")
 		log.Println(err)
 		return false
 	} else if response.StatusCode != 200 {
-		log.Printf("Server responded: %d to %s", response.StatusCode, requestType)
+		log.Printf("Server responded: %d", response.StatusCode)
 		return false
 	} else {
-		log.Printf("Correctly registered %s", requestType)
+		log.Printf("Correctly registered api")
 		return true
 	}
 }

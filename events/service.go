@@ -46,3 +46,12 @@ func Delete(owner string, id uint) {
 	result := Get(owner, id)
 	database.Database.Delete(result)
 }
+
+func Count(owner string) uint64 {
+	var result uint64
+	database.Database.
+		Model(&ScheduledEvent{}).
+		Where("owner = ?", owner).
+		Count(&result)
+	return result
+}
