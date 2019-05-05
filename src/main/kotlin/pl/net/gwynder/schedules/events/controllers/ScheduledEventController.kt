@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*
 import pl.net.gwynder.schedules.common.BaseController
 import pl.net.gwynder.schedules.events.entities.ScheduledEventHeader
 import pl.net.gwynder.schedules.events.services.ScheduledEventService
+import java.net.URLDecoder
 
 @RestController
 @RequestMapping("/api/schedules/events")
@@ -18,8 +19,8 @@ class ScheduledEventController(
     ): List<ScheduledEventHeader> {
         return service.select(
                 ownerProvider.owner(),
-                from,
-                to
+                URLDecoder.decode(from, "UTF-8"),
+                URLDecoder.decode(to, "UTF-8")
         ).map(service::toHeader)
     }
 

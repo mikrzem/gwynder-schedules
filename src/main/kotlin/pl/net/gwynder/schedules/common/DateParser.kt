@@ -2,7 +2,6 @@ package pl.net.gwynder.schedules.common
 
 import org.springframework.stereotype.Service
 import pl.net.gwynder.schedules.common.errors.InvalidFormat
-import java.net.URLDecoder
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
@@ -29,10 +28,11 @@ class DateParser : BaseService() {
     }
 
 
-    fun toDateTime(encodedText: String): LocalDateTime {
-        val text = URLDecoder.decode(encodedText, "UTF-8")
+    fun toDateTime(text: String): LocalDateTime {
         try {
-            return OffsetDateTime.parse(text, dateTimeFormat).atZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
+            return OffsetDateTime.parse(text, dateTimeFormat)
+                    .atZoneSameInstant(ZoneOffset.UTC)
+                    .toLocalDateTime()
         } catch (ex: Exception) {
             logger.error("Error reading datetime", ex)
             throw InvalidFormat("datetime")
@@ -40,7 +40,9 @@ class DateParser : BaseService() {
     }
 
     fun toString(datetime: LocalDateTime): String {
-        return dateTimeFormat.format(datetime)
+        return dateTimeFormat.format(
+                datetime.atOffset(ZoneOffset.UTC)
+        )
     }
 
 }
