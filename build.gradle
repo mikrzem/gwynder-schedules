@@ -45,3 +45,11 @@ compileTestKotlin {
     }
 }
 
+bootJar {
+    archiveName = 'gwynder-schedules.jar'
+}
+
+springBoot {
+    buildInfo()
+}
+
