@@ -1,26 +1,30 @@
 package pl.net.gwynder.schedules.events.controllers
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.web.bind.annotation.*
 import pl.net.gwynder.schedules.common.BaseController
+import pl.net.gwynder.schedules.events.entities.ScheduledEventFilter
 import pl.net.gwynder.schedules.events.entities.ScheduledEventHeader
 import pl.net.gwynder.schedules.events.services.ScheduledEventService
-import java.net.URLDecoder
+import java.util.*
 
 @RestController
 @RequestMapping("/api/schedules/events")
 class ScheduledEventController(
-        private val service: ScheduledEventService
+        private val service: ScheduledEventService,
+        private val json: ObjectMapper
 ) : BaseController() {
 
     @GetMapping
     fun select(
-            @RequestParam("from") from: String,
-            @RequestParam("to") to: String
+            @RequestParam("filter") filter: String
     ): List<ScheduledEventHeader> {
         return service.select(
                 ownerProvider.owner(),
-                URLDecoder.decode(from, "UTF-8"),
-                URLDecoder.decode(to, "UTF-8")
+                json.readValue(
+                        Base64.getDecoder().decode(filter),
+                        ScheduledEventFilter::class.java
+                )
         ).map(service::toHeader)
     }
 

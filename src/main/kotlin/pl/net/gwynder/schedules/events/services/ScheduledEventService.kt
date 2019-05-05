@@ -5,6 +5,7 @@ import pl.net.gwynder.schedules.common.BaseService
 import pl.net.gwynder.schedules.common.DateParser
 import pl.net.gwynder.schedules.common.errors.DataNotFound
 import pl.net.gwynder.schedules.events.entities.ScheduledEvent
+import pl.net.gwynder.schedules.events.entities.ScheduledEventFilter
 import pl.net.gwynder.schedules.events.entities.ScheduledEventHeader
 import java.time.LocalDateTime
 
@@ -14,11 +15,11 @@ class ScheduledEventService(
         private val dateParser: DateParser
 ) : BaseService() {
 
-    fun select(owner: String, from: String, to: String): List<ScheduledEvent> {
+    fun select(owner: String, filter: ScheduledEventFilter): List<ScheduledEvent> {
         return repository.findByDates(
                 owner,
-                dateParser.toDateTime(from),
-                dateParser.toDateTime(to)
+                dateParser.toDateTime(filter.from),
+                dateParser.toDateTime(filter.to)
         )
     }
 
