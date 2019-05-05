@@ -46,7 +46,7 @@ compileTestKotlin {
 }
 
 bootJar {
-    archiveName = 'gwynder-schedules.jar'
+    archiveFileName = 'gwynder-schedules.jar'
 }
 
 springBoot {
