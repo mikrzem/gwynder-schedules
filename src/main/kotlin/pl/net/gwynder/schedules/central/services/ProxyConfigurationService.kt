@@ -80,7 +80,7 @@ class ProxyConfigurationService(
     }
 
     private fun sendRegistration() {
-        val url = "$registerUrl/proxy/api/notes"
+        val url = "$registerUrl/proxy/api/schedules"
         val headers = HttpHeaders.writableHttpHeaders(HttpHeaders())
         headers.set("InternalToken", token())
         val entity = HttpEntity(
